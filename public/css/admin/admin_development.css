@@ -1,0 +1,16 @@
+.a_tag_color{
+	color: #3C8DBC;
+}
+.dataTables_length{
+	display: none !important;
+}
+.background_color{
+background-color:#00C0F1 !important;
+}
+
+
+.complaint_usertype{font-weight: bold;}
+.complaint_subject{font-weight: bold;}
+.complaint_problem{font-size: 14px;}
+.user_complaint_text{background:#c5c5c5 !important; padding:10px !important;margin-bottom: 4px;}
+.admin_complaint_text{background:lightgoldenrodyellow  !important; padding:10px !important;margin-bottom: 4px;}

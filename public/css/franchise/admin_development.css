@@ -1,0 +1,24 @@
+.manag-label label{ display:block;}
+.btn-right{ padding-top:25px;}
+.ratingtext {
+  color: #ccc;
+  display: block;
+  font-size: 11px;
+  padding-top: 4px;
+}
+.profile-username {
+  text-align: left;
+}
+.error-message{
+	color: red !important ;
+}
+.passwordErrMsg{
+color: red !important;
+}
+.padding_in_form{
+	padding-bottom: 20px;
+}
+.padding_in_form1{
+	padding-bottom: 20px;
+	margin-top: 25px;
+}
