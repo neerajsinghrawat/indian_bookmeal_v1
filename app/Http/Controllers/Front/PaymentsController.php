@@ -160,7 +160,7 @@ class PaymentsController extends Controller
        if ($request->payment_type == 'Cod') {
 
             $this->cod($request->take_order);
-            Session::flash('success','Your order Place successfully');
+            //Session::flash('success','Your order Place successfully');
             return Redirect::to('/cart-thankyou');
 
        }elseif($request->payment_type == 'Stripe'){
@@ -168,7 +168,7 @@ class PaymentsController extends Controller
           $res = $this->stripe($request);
 
           if ($res == 1) {
-            Session::flash('success','Your order Place successfully');
+            //Session::flash('success','Your order Place successfully');
             return Redirect::to('/cart-thankyou');
           }else{
             Session::flash('error','Try again!');
@@ -317,9 +317,9 @@ class PaymentsController extends Controller
         if (Session::has('apply_coupon')) {
                 Session::forget('apply_coupon');
         }
-        Session::flash('success_h1','Payment');
+        //Session::flash('success_h1','Payment');
         
-        Session::flash('success','Payment successfully');          
+        //Session::flash('success','Payment successfully');          
 
         
         return true;
@@ -806,9 +806,9 @@ class PaymentsController extends Controller
 			if (Session::has('apply_coupon')) {
           		Session::forget('apply_coupon');
      		}
-			Session::flash('success_h1','Payment');
+			//ession::flash('success_h1','Payment');
             
-          Session::flash('success','Payment successfully');          
+          //Session::flash('success','Payment successfully');          
 
           
             return Redirect::to('/cart-thankyou');

@@ -181,7 +181,7 @@
                                     <label class="custom-control custom-radio ">
                                         <input type="radio" name="take_order" class="custom-control-input take_order" value="takeaway" checked="checked" newshipping_amount="{{ $newshipping_amount }}" total_amount="{{$total_amount}}">
                                         <span class="custom-control-indicator"></span>
-                                        <span class="custom-control-description">Take-Away</span>
+                                        <span class="custom-control-description">Take Away</span>
                                     </label>
                                 </div>
                                 <?php } ?>
@@ -232,7 +232,7 @@
                                     <label class="custom-control custom-radio ">
                                         <input type="radio" name="payment_type" class="custom-control-input newPayment" value="Stripe">
                                         <span class="custom-control-indicator"></span>
-                                        <span class="custom-control-description">Stripe</span>
+                                        <span class="custom-control-description">Card</span>
                                     </label>
                                 </div>
                                 <?php } if($payment_getway['cod'] == 1) { ?>
@@ -485,7 +485,7 @@ $(window).load(function(){
       if($(this).prop('checked')){
 
         if (valNew == 'delivery') {
-           var newshipping_amount=$(this).attr('newshipping_amount');
+           var newshipping_amount=parseFloat($(this).attr('newshipping_amount'));
            var total_amount=$(this).attr('total_amount');
 
            var alltotal = parseFloat(total_amount)+parseFloat(newshipping_amount);

@@ -41,12 +41,14 @@
                         </address>
                     </div>
                     <div class="col-sm-4 text-center">
+                        <?php if($orderDetail->take_order != 'takeaway'){ ?>
                         <address>
                         <strong>Delivery Address:</strong><br>
                             <?php echo $orderDetail->user->first_name.' '.$orderDetail->user->last_name; ?><br>
                             <?php echo $orderDetail->delivery_address.', '.$orderDetail->delivery_postcode; ?><br>
                             <?php echo $orderDetail->delivery_phone; ?><br>
                         </address>
+                        <?php } ?>
                     </div>
                     <!-- <div class="col-sm-6">
                         <address>
@@ -59,12 +61,12 @@
                         <address>
                             <strong>Order Details:</strong><br>
                             <b>Order Date:</b> <?php echo date('d/m/Y H:i A', strtotime($orderDetail->created_at)); ?><br>
-                            <b>Payment Type:</b> <?php echo ($orderDetail->payment_mode == 'cod')?'Cash on delivery':'Stripe'; ?><br>
+                            <b>Payment Type:</b> <?php echo ($orderDetail->payment_mode == 'cod')?'Cash on delivery':'Card'; ?><br>
                             <b>Payment Status:</b> <?php echo ($orderDetail->payment_status == 'cod')?'Succeeded':$orderDetail->payment_status; ?><br>
                             <?php if($orderDetail->payment_mode != 'cod' && !empty($orderDetail->payment_id)){ ?>
                                 <b>Txn Id:</b> <?php echo $orderDetail->payment_id;  ?><br>
                             <?php } ?>
-                                <b>Order Type:</b> <?php echo ($orderDetail->take_order == 'takeaway')?'Take-Away':'Home-Delivery';?><br>
+                                <b>Order Type:</b> <?php echo ($orderDetail->take_order == 'takeaway')?'Take Away':'Home-Delivery';?><br>
                                 <b>Order Status:</b> <?php echo $orderDetail->order_status;?><br>
                         </address>
                     </div>
@@ -76,7 +78,7 @@
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading  bg-dark dark p-4">
-                        <h3 class="panel-title"><strong>Order summary</strong><span class="orderSt">{{($orderDetail->payment_mode == 'cod')?'Cash on delivery':'Stripe'}}</span>&nbsp;<span class="orderSt"> {{($orderDetail->take_order == 'takeaway')?'Take-Away':'Home-Delivery'}}</span></h3>
+                        <h3 class="panel-title"><strong>Order summary</strong><span class="orderSt">{{($orderDetail->payment_mode == 'cod')?'Cash on delivery':'Card'}}</span>&nbsp;<span class="orderSt"> {{($orderDetail->take_order == 'takeaway')?'Take Away':'Home-Delivery'}}</span></h3>
                         
                     </div>
                     <div class="panel-body ">
@@ -194,6 +196,17 @@
         </div>
         
         <?php if($orderDetail->take_order == 'takeaway'){ ?>
+            <div class="row">
+                <div class="col-md-12">
+                <h3 class="panel-title bg-dark dark p-4"><strong>Track Order:</strong></h3><hr>
+                    <ol class="progtrckr" data-progtrckr-steps="4">
+                        <li class="progtrckr-<?php echo isset($orderDeliveryStatusArr['confirmed']) ? 'done' : 'todo'; ?>">Order Confirmed <?php echo isset($orderDeliveryStatusArr['confirmed']) ? '('.date('h:i A', strtotime($orderDeliveryStatusArr['confirmed']->updated_at)).')' : '';  ?></li>
+                        <li class="progtrckr-<?php echo isset($orderDeliveryStatusArr['preparing_food']) ? 'done' : 'todo'; ?>">Preparing Food <?php echo isset($orderDeliveryStatusArr['preparing_food']) ? '('.date('h:i A', strtotime($orderDeliveryStatusArr['preparing_food']->updated_at)).')' : '';  ?></li>
+                        <li class="progtrckr-<?php echo isset($orderDeliveryStatusArr['food_prepared_packed']) ? 'done' : 'todo'; ?>">Food Prepared and Packed <?php echo isset($orderDeliveryStatusArr['food_prepared_packed']) ? '('.date('h:i A', strtotime($orderDeliveryStatusArr['food_prepared_packed']->updated_at)).')' : '';  ?></li>
+                        <li class="progtrckr-<?php echo isset($orderDeliveryStatusArr['food_collected']) ? 'done' : 'todo'; ?>">Food Collected <?php echo isset($orderDeliveryStatusArr['food_collected']) ? '('.date('h:i A', strtotime($orderDeliveryStatusArr['food_collected']->updated_at)).')' : '';  ?></li>
+                    </ol>
+                </div>
+            </div>        
         <?php }else{?>
             <div class="row">
                 <div class="col-md-12">

@@ -62,7 +62,7 @@
         </div>
         <!-- /.col -->
         <div class="col-sm-4 invoice-col">
-          <b>Payment Type:</b> <?php echo ($orderDetail->payment_mode == 'cod')?'Cash on delivery':'Stripe'; ?><br>
+          <b>Payment Type:</b> <?php echo ($orderDetail->payment_mode == 'cod')?'Cash on delivery':'Card'; ?><br>
           <b>Payment Status:</b> <?php echo ($orderDetail->payment_status == 'cod')?'Succeeded':$orderDetail->payment_status; ?><br>
           <?php if($orderDetail->payment_mode != 'cod' && !empty($orderDetail->payment_id)){ ?>
               <b>Txn Id:</b> <?php echo $orderDetail->payment_id;  ?><br>

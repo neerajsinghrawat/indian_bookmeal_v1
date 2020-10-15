@@ -52,23 +52,25 @@
         </div>
 		
 		    <div class="col-sm-4 invoice-col">
+          <?php if($orderDetail->take_order != 'takeaway'){ ?>
           <strong>Delivery Address:</strong>
           <address>
             <?php echo ucwords($orderDetail->user->first_name .' '.$orderDetail->user->last_name); ?><br>
             <?php echo $orderDetail->delivery_address; ?>,  <?php echo $orderDetail->delivery_postcode; ?><br>
             Phone: <?php echo $orderDetail->delivery_phone; ?><br>
           </address>
+          <?php } ?>
         </div>
 		
         <!-- /.col -->
         <div class="col-sm-4 invoice-col">
           
-          <b>Payment Type:</b> <?php echo ($orderDetail->payment_mode == 'cod')?'Cash on delivery':'Stripe'; ?><br>
+          <b>Payment Type:</b> <?php echo ($orderDetail->payment_mode == 'cod')?'Cash on delivery':'Card'; ?><br>
           <b>Payment Status:</b> <?php echo ($orderDetail->payment_status == 'cod')?'Succeeded':$orderDetail->payment_status; ?><br>
           <?php if($orderDetail->payment_mode != 'cod' && !empty($orderDetail->payment_id)){ ?>
               <b>Txn Id:</b> <?php echo $orderDetail->payment_id;  ?><br>
           <?php } ?>
-              <b>Order Type:</b> <?php echo ($orderDetail->take_order == 'takeaway')?'Take-Away':'Home-Delivery';?><br>
+              <b>Order Type:</b> <?php echo ($orderDetail->take_order == 'takeaway')?'Take Away':'Home-Delivery';?><br>
               <b>Order Status:</b> <?php echo $orderDetail->order_status;?><br>
         </div>
         <!-- /.col -->
@@ -200,7 +202,95 @@
         </div>
       </div> -->
 	  
-	 <?php if($orderDetail->take_order == 'takeaway'){ }else{ ?>
+	 <?php if($orderDetail->take_order == 'takeaway'){ ?>
+      <div class="row">
+          <div class="col-xs-12">
+          
+            <ol class="progtrckr" data-progtrckr-steps="4">
+              <li class="progtrckr-<?php echo isset($orderDeliveryStatusArr['confirmed']) ? 'done' : 'todo'; ?>">Order Confirmed <?php echo isset($orderDeliveryStatusArr['confirmed']) ? '('.date('h:i A', strtotime($orderDeliveryStatusArr['confirmed']->updated_at)).')' : '';  ?></li><!--
+             --><li class="progtrckr-<?php echo isset($orderDeliveryStatusArr['preparing_food']) ? 'done' : 'todo'; ?>">Food Pack and Assign <?php echo isset($orderDeliveryStatusArr['preparing_food']) ? '('.date('h:i A', strtotime($orderDeliveryStatusArr['preparing_food']->updated_at)).')' : '';  ?></li><!--
+             --><li class="progtrckr-<?php echo isset($orderDeliveryStatusArr['food_prepared_packed']) ? 'done' : 'todo'; ?>">Out For Delivery <?php echo isset($orderDeliveryStatusArr['food_prepared_packed']) ? '('.date('h:i A', strtotime($orderDeliveryStatusArr['food_prepared_packed']->updated_at)).')' : '';  ?></li><!--
+             --><li class="progtrckr-<?php echo isset($orderDeliveryStatusArr['food_collected']) ? 'done' : 'todo'; ?>">Delivered <?php echo isset($orderDeliveryStatusArr['food_collected']) ? '('.date('h:i A', strtotime($orderDeliveryStatusArr['food_collected']->updated_at)).')' : '';  ?></li>
+            </ol>
+
+          </div>
+      </div>
+      <div class="clearfix"></div>
+      <?php 
+        if(isset($orderDeliveryStatusArr['assign_staff']) && !empty($orderDeliveryStatusArr['assign_staff'])){
+      ?>
+      <div class="row">
+            <div class="col-xs-12">
+              <div class="col-xs-4 col-xs-offset-3">
+              
+                <p class="text-muted well well-sm no-shadow" style="margin-top: 20px;">
+                <?php if(!empty($deliveryUserDetailArr)){ ?>
+                  <span><strong>Name: </strong> <?php echo $deliveryUserDetailArr['name']; ?></span><br/>
+                  <span><strong>Email: </strong> <?php echo $deliveryUserDetailArr['email']; ?></span><br/>
+                  <span><strong>Phone: </strong> <?php echo isset($deliveryUserDetailArr['phone']) ? $deliveryUserDetailArr['phone'] : ''; ?></span><br/>
+                  <span><strong>Mobile: </strong> <?php echo isset($deliveryUserDetailArr['mobile']) ? $deliveryUserDetailArr['mobile'] : ''; ?></span>
+                  
+                <?php } ?>
+                </p>
+              </div>
+            </div>
+      </div>
+      <?php  } ?>
+      <div class="row">
+        <div class="col-xs-12">
+
+          <h3>Assign Delivery Staff</h3>
+          </hr>
+          <form action="<?php echo url('/').'/admin/orders/update_delivery_satff' ?>" enctype="multipart/form-data" method="POST" >
+                 {{ csrf_field() }}
+
+            <div class="form-group">
+            <div class="col-xs-6">
+              <label for="exampleInputEmail1">Delivery Staff</label>
+              <select class="form-control delivery_staff_id" name="staff_id" required>
+                <option value="">-Select-</option>
+                <option value="admin">Admin</option>
+                <?php 
+                  if(!empty($staffs)){
+                    foreach($staffs as $staff){
+                ?>
+                  <option value="<?php echo $staff->id; ?>"><?php echo $staff->first_name.' '.$staff->last_name; ?></option>
+                <?php     
+                    }
+                  }
+                ?>
+              </select>
+            </div>
+
+            <div class="col-xs-6 order_status"  style="display:none">     
+                <label for="exampleInputEmail1">Order Status</label>
+                <?php $orderStatusArr = array('assign_staff' => 'Food Pack and Assign', 'out_for_delivery'=>'Out For Delivery','delivered'=>'Delivered'); ?>
+                <select class="form-control " name="order_status">
+                  <option value="">- Select -</option>
+                  <?php 
+                    if(!empty($orderStatusArr)){
+                      foreach($orderStatusArr as $key => $order_status){
+                  ?>
+                    <option value="<?php echo $key.'~'.$order_status; ?>"><?php echo $order_status ?></option>
+                  <?php 
+                      }
+                    }
+                  ?>
+                </select>
+                
+            </div> 
+            </div> 
+
+            <div class="clearfix"></div>
+            <input type="hidden" name="order_number" value="<?php echo $orderDetail->order_number; ?>">
+            <div class="box-footer">
+             <label for="exampleInputEmail1"></label>
+                  <button type="submit" id="submitbutton" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+   <?php }else{ ?>
       <div class="row">
           <div class="col-xs-12">
       		

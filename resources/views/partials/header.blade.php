@@ -24,12 +24,13 @@
                             <li class=""><a href="{{ route('login') }}">Login</a></li>
                             <li class="lidesign"><a href="{{ route('register') }}">Register</a></li>
                         @else
-                            <li class="has-dropdown lidesign">
-                                <a href="#">My Account</a>
+                            <li class="has-dropdown lidesign btn btn-outline-secondary" >
+                                <a href="#" style="line-height: 21px;"><span class="setHeader">Hello, {{ Auth::user()->first_name }}</span>
+                                    <br><b style="font-size: 15px;">My Account</b></a>
                                 <div class="dropdown-container setTpo">
                                     <ul class="dropdown-mega">
                                         <li ><a href="<?php echo URL::to('/').'/dashboard'; ?>">Dashboard</a></li>
-                                   <li class="border_none"> <a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout ({{ Auth::user()->username }})</a>
+                                   <li class="border_none"> <a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout </a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
                                     </li>
                                     </ul>
